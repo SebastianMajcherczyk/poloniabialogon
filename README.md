@@ -7,7 +7,7 @@
 - Project contains admin panel for editing the blog articles and the gallery
 - It works with Firebase for storing the articles (Firestore) images (Storage) and admin authentication (Authentication)
 
-  ## Status
-  - Website is available at the addres: www.poloniabialogon.pl
+## Status
+- Website is available at the addres: www.poloniabialogon.pl
  
     
