@@ -71,7 +71,6 @@ export const Sponsors = () => {
 				<SponsorLogo src={Metbud} alt='Logo Metbud' />
 				<SponsorLogo src={Rokar} alt='Logo Rokar' />
 				<SponsorLogo src={Orto} alt='Logo Orto' />
-				<SponsorLogo src={K2} alt='Logo K2' />
 				<SponsorLogo src={SantoSerwis} alt='Logo SantoSerwis' />
 			</Box>
 		</Box>

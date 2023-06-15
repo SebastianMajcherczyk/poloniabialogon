@@ -1,6 +1,7 @@
-import { Box } from '@mui/material';
+import { Box, Link, Paper } from '@mui/material';
 import React from 'react';
 import { Element } from 'react-scroll';
+import { FooterCard } from '../../styled/footerCard';
 
 export const Footer = () => {
 	return (
@@ -25,35 +26,81 @@ export const Footer = () => {
 						listStyleType: 'none',
 						margin: '0 auto',
 					}}>
-					<li style={{ margin: '10px 5px' }}>
-						<p>PARAFIALNY KLUB SPORTOWY </p> <p>POLONIA BIAŁOGON KIELCE </p>
-						<p>adres: Siedem Źródeł 9</p>
-						<p>25-819 Kielce </p>
-						<p>telefon: <a href="tel:533499477">533 499 477</a> </p>
-						<p>
-							e-mail:{' '}
-							<a
-								style={{ color: 'white' }}
-								href='mailto:poloniabialogon.kielce@wp.pl'>
-								poloniabialogon.kielce@wp.pl
-							</a>
-						</p>
+					<li>
+						<FooterCard>
+							<p>PARAFIALNY KLUB SPORTOWY </p> <p>POLONIA BIAŁOGON KIELCE </p>
+							<p>adres: Siedem Źródeł 9</p>
+							<p>25-819 Kielce </p>
+							<p>
+								telefon:{' '}
+								<Link
+									sx={{ color: 'text.primary', textDecoration: 'none' }}
+									href='tel:533499477'>
+									533 499 477
+								</Link>{' '}
+							</p>
+							<p>
+								e-mail:{' '}
+								<Link
+									sx={{ color: 'text.primary', textDecoration: 'none' }}
+									href='mailto:poloniabialogon.kielce@wp.pl'>
+									poloniabialogon.kielce@wp.pl
+								</Link>
+							</p>
+						</FooterCard>
 					</li>
-					<li style={{ margin: '30px 5px', minWidth: '150px' }}>
-						<p>Prezes Zarządu:</p><p>Paweł Kowalski </p><a href="tel:533 499 477">533 499 477</a>
+					<li>
+						<FooterCard>
+							<p>Prezes Zarządu:</p>
+							<p>Paweł Kowalski </p>
+							<p>
+								tel:{' '}
+								<Link
+									href='tel:533 499 477'
+									sx={{ color: 'text.primary', textDecoration: 'none' }}>
+									{' '}
+									533 499 477
+								</Link>
+							</p>
+						</FooterCard>
 					</li>
-					<li style={{ margin: '30px 5px', minWidth: '150px' }}>
-						<p>Sekretarz:</p> <p>Marek Wyrębek</p><a href="tel:781152525">781 152 525</a> 
+					<li>
+						<FooterCard>
+							<p>Sekretarz:</p> <p>Marek Wyrębek</p>
+							<p>
+								tel:{' '}
+								<Link
+									href='tel:781152525'
+									sx={{ color: 'text.primary', textDecoration: 'none' }}>
+									781 152 525
+								</Link>
+							</p>
+						</FooterCard>
 					</li>
-					<li style={{ margin: '30px 5px', minWidth: '150px' }}>
-						<p>Wiceprezes Zarządu:</p>
-						<p>Tomek Cieślik</p>
-						<a href="tel:510993333">510 993 333</a>
+					<li>
+						{' '}
+						<FooterCard>
+							<p>Wiceprezes Zarządu:</p>
+							<p>Tomek Cieślik</p>
+							<p>
+								tel:{' '}
+								<Link
+									
+									sx={{ color: 'text.primary', textDecoration: 'none' }}
+									href='tel:510993333'>
+									510 993 333
+								</Link>
+							</p>
+						</FooterCard>
 					</li>
-					<li style={{ margin: '30px 5px', minWidth: '150px' }}>
-						<p>Skarbnik:</p>
-						<p>Katarzyna Dziedzic</p>
-						<a href="tel:694">694 733 798</a>
+					<li>
+						<FooterCard>
+							<p>Skarbnik:</p>
+							<p>Katarzyna Dziedzic</p>
+							<p>
+								tel: <Link sx={{ color: 'text.primary', textDecoration: 'none' }}href='tel:694'>694 733 798</Link>
+							</p>
+						</FooterCard>
 					</li>
 				</ul>
 			</Box>
