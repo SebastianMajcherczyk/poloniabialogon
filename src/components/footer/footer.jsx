@@ -64,19 +64,7 @@ export const Footer = () => {
 							</p>
 						</FooterCard>
 					</li>
-					<li>
-						<FooterCard>
-							<p>Sekretarz:</p> <p>Marek Wyrębek</p>
-							<p>
-								tel:{' '}
-								<Link
-									href='tel:781152525'
-									sx={{ color: 'text.primary', textDecoration: 'none' }}>
-									781 152 525
-								</Link>
-							</p>
-						</FooterCard>
-					</li>
+					
 					<li>
 						{' '}
 						<FooterCard>

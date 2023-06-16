@@ -26,7 +26,7 @@ export const ArticleForm = () => {
 	const [article, setArticle] = useState({
 		title: '',
 		description: '',
-		active: 'false',
+		active: false,
 	});
 	const [images, setImages] = useState([]);
 	const [photoUrlList, setPhotoUrlList] = useState([]);

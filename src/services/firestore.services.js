@@ -119,13 +119,12 @@ const firestoreServiceDef = () => {
 			const snapshot = await getDoc(articleRef);
 			const { photos, id } = snapshot.data();
 			for await (const photo of photos) {
-				if (photo.fileName) {
+				if (photo?.fileName) {
 					const path = `articles-photos/${id}/${photo.fileName}`;
 					await storageService.deleteImage(path);
 				}
-
-				await deleteDoc(articleRef);
 			}
+			await deleteDoc(articleRef);
 		} catch (error) {
 			console.log(error);
 		}
