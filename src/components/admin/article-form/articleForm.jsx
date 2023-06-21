@@ -38,17 +38,13 @@ export const ArticleForm = () => {
 	const [articleActive, setArticleActive] = useState(false);
 	const handleChange = e => {
 		const { name, value } = e.target;
-		if (name === 'description') {
-			setArticle({ ...article, [name]: value.replace(/\n/g, '<br>') });
-		} else {
-			setArticle({ ...article, [name]: value });
-		}
-	};
+		setArticle({ ...article, [name]: value });
+	};;
 
 	const handleCheckBox = () => setArticleActive(!articleActive);
 
-	const loadArticle = async () => {
-		const data = await firestoreService.getArticleById(id);
+	const loadArticle = async (identifier) => {
+		const data = await firestoreService.getArticleById(identifier);
 		setArticle(data);
 		setArticleActive(data.active);
 
@@ -64,7 +60,7 @@ export const ArticleForm = () => {
 	};
 
 	useEffect(() => {
-		if (isInEditMode) loadArticle();
+		if (isInEditMode) loadArticle(id);
 	}, [isInEditMode, id]);
 
 	useEffect(() => {
@@ -98,6 +94,13 @@ export const ArticleForm = () => {
 
 	const saveContent = async e => {
 		e.preventDefault();
+
+		//Extract file extemsjin from file name
+		const  getFileExtension = (filename) =>  {
+			return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+		}
+
+
 		if (isInEditMode) {
 			const articleClone = {
 				...article,
@@ -117,7 +120,7 @@ export const ArticleForm = () => {
 			for await (const imageData of images) {
 				const { file } = imageData;
 				const uniqueId = uid(4);
-				const type = file.name.split('.').pop();
+				const type = getFileExtension(file.name);
 				const photoId = `${uniqueId}.${type}`;
 				const path = `articles-photos/${id}/${photoId}`;
 				await storageService.addImage(path, file);
@@ -136,13 +139,15 @@ export const ArticleForm = () => {
 				article.firestoreId,
 				articleClone
 			);
+			setImages([]);
+			await getNews();
 		} else {
 			const articleId = uid();
 			const articleClone = { ...article, id: articleId, photos: [] };
 			for await (const imageData of images) {
 				const { file } = imageData;
 				const id = uid(5);
-				const type = file.name.split('.').pop();
+				const type = getFileExtension(file.name);
 				const photoId = `${id}.${type}`;
 				const path = `articles-photos/${articleId}/${photoId}`;
 				await storageService.addImage(path, file);
@@ -153,10 +158,12 @@ export const ArticleForm = () => {
 				});
 			}
 			await firestoreService.addArticle(articleClone);
+			
+			setImages([]);
+			await getNews();
+			loadArticle(articleId)
 		}
 
-		setImages([]);
-		getNews();
 	};
 	const saveAndExit = e => {
 		saveContent(e);
