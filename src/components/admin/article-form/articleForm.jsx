@@ -33,24 +33,35 @@ export const ArticleForm = () => {
 	const [activeFoto, setActiveFoto] = useState(null);
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const isInEditMode = useMemo(() => id !== undefined, [id]);
+	const [isInEditMode, setIsInEditMode] = useState(false);
+
 	const [selectedRadio, setSelectedRadio] = useState('');
 	const [articleActive, setArticleActive] = useState(false);
 	const handleChange = e => {
 		const { name, value } = e.target;
-		setArticle({ ...article, [name]: value });
-	};;
+		if (name === 'description') {
+			setArticle({ ...article, [name]: value.replace(/\n/g, '<br>') });
+		} else {
+			setArticle({ ...article, [name]: value });
+		}
+	};
 
 	const handleCheckBox = () => setArticleActive(!articleActive);
 
-	const loadArticle = async (identifier) => {
-		const data = await firestoreService.getArticleById(identifier);
+	const loadArticle = async () => {
+		if (!id) {
+			console.error('loadArticle called without an id');
+			return;
+		}
+		const data = await firestoreService.getArticleById(id);
+		if (!data) {
+			console.error(`No article found with id ${id}`);
+			return;
+		}
 		setArticle(data);
 		setArticleActive(data.active);
 
-		/*On the list of photos from server find a photo with type 'main' and  set this photo as an activeFoto state  */
 		const mainFoto = data.photos.find(({ type }) => type === 'main');
-
 		if (mainFoto) {
 			setActiveFoto({
 				type: 'from-server',
@@ -58,9 +69,11 @@ export const ArticleForm = () => {
 			});
 		}
 	};
-
 	useEffect(() => {
-		if (isInEditMode) loadArticle(id);
+		setIsInEditMode(id !== undefined);
+	}, [id]);
+	useEffect(() => {
+		if (isInEditMode) loadArticle();
 	}, [isInEditMode, id]);
 
 	useEffect(() => {
@@ -94,13 +107,6 @@ export const ArticleForm = () => {
 
 	const saveContent = async e => {
 		e.preventDefault();
-
-		//Extract file extemsjin from file name
-		const  getFileExtension = (filename) =>  {
-			return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
-		}
-
-
 		if (isInEditMode) {
 			const articleClone = {
 				...article,
@@ -120,7 +126,7 @@ export const ArticleForm = () => {
 			for await (const imageData of images) {
 				const { file } = imageData;
 				const uniqueId = uid(4);
-				const type = getFileExtension(file.name);
+				const type = file.name.split('.').pop();
 				const photoId = `${uniqueId}.${type}`;
 				const path = `articles-photos/${id}/${photoId}`;
 				await storageService.addImage(path, file);
@@ -139,15 +145,14 @@ export const ArticleForm = () => {
 				article.firestoreId,
 				articleClone
 			);
-			setImages([]);
-			await getNews();
+			await loadArticle();
 		} else {
 			const articleId = uid();
 			const articleClone = { ...article, id: articleId, photos: [] };
 			for await (const imageData of images) {
 				const { file } = imageData;
 				const id = uid(5);
-				const type = getFileExtension(file.name);
+				const type = file.name.split('.').pop();
 				const photoId = `${id}.${type}`;
 				const path = `articles-photos/${articleId}/${photoId}`;
 				await storageService.addImage(path, file);
@@ -158,13 +163,15 @@ export const ArticleForm = () => {
 				});
 			}
 			await firestoreService.addArticle(articleClone);
-			
-			setImages([]);
-			await getNews();
-			loadArticle(articleId)
+			setIsInEditMode(true);
+			navigate(`/admin/articles/article/edit/${articleId}`);
+			await loadArticle();
 		}
 
+		setImages([]);
+		getNews();
 	};
+
 	const saveAndExit = e => {
 		saveContent(e);
 		navigate('/admin/articles');
@@ -233,9 +240,9 @@ export const ArticleForm = () => {
 									justifyContent: 'center',
 									width: '100%',
 								}}>
-								{photoUrlList.map((photoConfig, index) => (
+								{photoUrlList.map(photoConfig => (
 									<Box
-										key={index}
+										key={photoConfig.fileName}
 										sx={{
 											margin: 3,
 											display: 'flex',
